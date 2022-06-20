@@ -44,8 +44,11 @@ class ContactController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
+
+
         $response = $this->contactService->getContactList($request->all(), $this->startTime);
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        $response['session']=$request->session()->get('my_name');
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -66,7 +69,7 @@ class ContactController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
             ]
         ];
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -78,12 +81,13 @@ class ContactController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-
-        $data = $this->contactService->store($request->all());
+        $data=$request->all();
+        $dataa = $this->contactService->store($data);
         $response = [
-            'data' => $data ?: null,
+            'data' => $dataa ?: null,
             '_response_status' => [
                 "success" => true,
+                "session" => $request->session()->get('my_name'),
                 "code" => ResponseAlias::HTTP_CREATED,
                 "message" => "Contact added successfully.",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now()),

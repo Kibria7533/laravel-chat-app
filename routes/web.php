@@ -20,3 +20,12 @@ $router->get('test', function () {
     event(new App\Events\StatusLiked('Someone'));
     return "Event has been sent!";
 });
+
+$router->get('/contacts', ["as" => "contacts", "uses" => "ContactController@getList"]);
+$router->get('/conversations', ["as" => "conversations", "uses" => "ConversationController@getList"]);
+$router->get('/messeges/{initId}/{recId}', ["as" => "messeges", "uses" => "MessegeController@getList"]);
+$router->post('/contact', ["as" => "contact", "uses" => "ContactController@store"]);
+$router->post('/conversation', ["as" => "conversation", "uses" => "ConversationController@store"]);
+$router->post('/messege', ["as" => "messege", "uses" => "MessegeController@store"]);
+$router->post('/group', ["as" => "group", "uses" => "GroupMemberController@store"]);
+$router->get('/gmesseges/{gid}/{gname}', ["as" => "gmesseges", "uses" => "GroupMemberController@getMesseges"]);

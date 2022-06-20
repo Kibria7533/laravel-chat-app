@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('to_contact_id');
             $table->text('messege_text');
             $table->integer('contact_id');
+            $table->integer('conversation_id');
             $table->timestamps();
         });
     }

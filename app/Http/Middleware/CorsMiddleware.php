@@ -23,7 +23,6 @@ class CorsMiddleware
             'Access-Control-Max-Age' => '86400',
             'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With,Token, User-Token, Domain'
         ];
-
         if ($request->isMethod('OPTIONS')) {
             return response()->json('{"method":"OPTIONS"}', 200, $headers);
         }
