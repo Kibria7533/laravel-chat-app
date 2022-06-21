@@ -45,7 +45,7 @@ class MessegeService
         ]);
         $messegeBuilder->whereNull('messeges.conversation_id');
         $messegeBuilder->where('messeges.from_contact_id',$initId);
-        $messegeBuilder->orWhere('messeges.from_contact_id',$recId);
+        $messegeBuilder->Where('messeges.to_contact_id',$recId);
         $messegeBuilder->join('contacts','contacts.id','messeges.contact_id');
         $messegeBuilder->orderBy('messeges.id','asc');
 
@@ -105,20 +105,10 @@ class MessegeService
     {
         $messege = app(Messege::class);
 
-//        DB::beginTransaction();
-//        try {
-
-
         $messege->fill($data);
         $messege->save();
-
-
-
-//        } catch (Throwable $e) {
-//            DB::rollBack();
-//            throw $e;
-//        }
-
+        $messege=Messege::get()->toArray();
+        event(new \App\Events\MessegeEvent($messege));
         return $messege;
     }
 

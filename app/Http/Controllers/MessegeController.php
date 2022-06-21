@@ -87,7 +87,6 @@ class MessegeController extends Controller
             'data' => $dataa ?: null,
             '_response_status' => [
                 "success" => true,
-                "session" => $request->session()->get('my_name'),
                 "code" => ResponseAlias::HTTP_CREATED,
                 "message" => "Contact added successfully.",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now()),

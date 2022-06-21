@@ -48,7 +48,6 @@ class ConversationController extends Controller
 
 
         $response = $this->conversationService->getConversationList($request->all(), $id, $this->startTime);
-        $response['session']=$request->session()->get('my_name');
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
@@ -90,6 +89,18 @@ class ConversationController extends Controller
         $dataa = $this->conversationService->store($cgname);
         $GM=app(GroupMemberService::class);
         $GM->store($data['selectedOption'],$dataa->id);
+
+        $conversationBuilder = Conversation::select([
+            'conversations.id',
+            'conversations.conversation_name',
+            'conversations.created_at',
+            'group_members.contact_id',
+            'conversations.updated_at'
+
+        ]);
+        $conversationBuilder->join('group_members','group_members.conversation_id','conversations.id');
+        $conversationForEvent=$conversationBuilder->get()->toArray();
+        event(new \App\Events\ConversationEvent($conversationForEvent));
         $response = [
             'data' => $dataa ?: null,
             '_response_status' => [

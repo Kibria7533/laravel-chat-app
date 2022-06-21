@@ -3,6 +3,7 @@
 namespace App\Services;
 
 
+use App\Models\Conversation;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Validation\Validator;
 use Carbon\Carbon;
@@ -19,6 +20,8 @@ use Throwable;
 
 class ContactService
 {
+    private $startTime;
+
     /**
      * @param array $request
      * @param Carbon $startTime
@@ -96,21 +99,11 @@ class ContactService
     {
         $contact = app(Contact::class);
 
-//        DB::beginTransaction();
-//        try {
-
-
             $contact->fill($data);
             $contact->save();
-
-
-
-//        } catch (Throwable $e) {
-//            DB::rollBack();
-//            throw $e;
-//        }
-
-        return $contact;
+            $contacts=Contact::get()->toArray();
+            event(new \App\Events\Contact($contacts));
+            return $contact;
     }
 
     /**

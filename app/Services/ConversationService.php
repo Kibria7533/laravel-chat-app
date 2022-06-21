@@ -95,21 +95,8 @@ class ConversationService
     public function store(array $data): Conversation
     {
         $contact = app(Conversation::class);
-
-//        DB::beginTransaction();
-//        try {
-
-
         $contact->fill($data);
         $contact->save();
-
-
-
-//        } catch (Throwable $e) {
-//            DB::rollBack();
-//            throw $e;
-//        }
-
         return $contact;
     }
 

@@ -47,7 +47,6 @@ class ContactController extends Controller
 
 
         $response = $this->contactService->getContactList($request->all(), $this->startTime);
-        $response['session']=$request->session()->get('my_name');
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
