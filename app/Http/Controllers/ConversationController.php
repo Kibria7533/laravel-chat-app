@@ -43,11 +43,11 @@ class ConversationController extends Controller
      * @return JsonResponse
      * @throws Throwable
      */
-    public function getList(Request $request): JsonResponse
+    public function getList(Request $request,int $id): JsonResponse
     {
 
 
-        $response = $this->conversationService->getConversationList($request->all(), $this->startTime);
+        $response = $this->conversationService->getConversationList($request->all(), $id, $this->startTime);
         $response['session']=$request->session()->get('my_name');
         return Response::json($response, ResponseAlias::HTTP_OK);
     }

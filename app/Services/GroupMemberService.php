@@ -38,7 +38,8 @@ class GroupMemberService
             'messeges.created_at',
             'messeges.updated_at'
         ]);
-        $groupmMemberBuilder->where('messeges.from_contact_id', $gid);
+        $groupmMemberBuilder->where('messeges.conversation_id', $gid);
+        $groupmMemberBuilder->join('contacts','contacts.id','messeges.contact_id');
         $groupmMemberBuilder->orderBy('messeges.id', 'asc');
         /** @var Collection $contacts */
         if (is_numeric($paginate) || is_numeric($pageSize)) {

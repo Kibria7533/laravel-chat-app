@@ -22,7 +22,7 @@ $router->get('test', function () {
 });
 
 $router->get('/contacts', ["as" => "contacts", "uses" => "ContactController@getList"]);
-$router->get('/conversations', ["as" => "conversations", "uses" => "ConversationController@getList"]);
+$router->get('/conversations/{id}', ["as" => "conversations", "uses" => "ConversationController@getList"]);
 $router->get('/messeges/{initId}/{recId}', ["as" => "messeges", "uses" => "MessegeController@getList"]);
 $router->post('/contact', ["as" => "contact", "uses" => "ContactController@store"]);
 $router->post('/conversation', ["as" => "conversation", "uses" => "ConversationController@store"]);

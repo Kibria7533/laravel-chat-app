@@ -24,7 +24,7 @@ class ConversationService
      * @param Carbon $startTime
      * @return array
      */
-    public function getConversationList(array $request, Carbon $startTime): array
+    public function getConversationList(array $request,int $id, Carbon $startTime): array
     {
 
         $pageSize = $request['page_size'] ?? "";
@@ -38,6 +38,8 @@ class ConversationService
             'conversations.updated_at'
 
         ]);
+        $conversationBuilder->join('group_members','group_members.conversation_id','conversations.id');
+        $conversationBuilder->where('group_members.contact_id',$id);
         /** @var Collection $contacts */
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: 10;

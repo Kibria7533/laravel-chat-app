@@ -13,6 +13,7 @@ use App\Models\Messege;
 use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use phpDocumentor\Reflection\Types\Null_;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -31,21 +32,23 @@ class MessegeService
         $paginate = $request['page'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         /** @var Messege|Builder $messegeBuilder */
-
         $messegeBuilder = Messege::select([
             'messeges.id',
             'messeges.from_contact_id',
             'messeges.to_contact_id',
             'messeges.messege_text',
             'contacts.first_name as sender_name',
+            'messeges.conversation_id',
             'messeges.contact_id',
             'messeges.created_at',
             'messeges.updated_at'
         ]);
+        $messegeBuilder->whereNull('messeges.conversation_id');
         $messegeBuilder->where('messeges.from_contact_id',$initId);
         $messegeBuilder->orWhere('messeges.from_contact_id',$recId);
         $messegeBuilder->join('contacts','contacts.id','messeges.contact_id');
         $messegeBuilder->orderBy('messeges.id','asc');
+
         /** @var Collection $contacts */
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: 10;
