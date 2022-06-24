@@ -3,6 +3,7 @@
 namespace App\Services;
 
 
+use App\Events\GroupMessegeEvent;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Validation\Validator;
 use Carbon\Carbon;
@@ -107,8 +108,27 @@ class MessegeService
 
         $messege->fill($data);
         $messege->save();
-        $messege=Messege::get()->toArray();
-        event(new \App\Events\MessegeEvent($messege));
+
+        if($messege->conversation_id) {
+        $groupmMemberBuilder = Messege::select([
+            'messeges.id',
+            'messeges.from_contact_id',
+            'messeges.to_contact_id',
+            'messeges.messege_text',
+            'contacts.first_name as sender_name',
+            'messeges.contact_id',
+            'messeges.created_at',
+            'messeges.updated_at'
+        ]);
+        $groupmMemberBuilder->where('messeges.conversation_id', $messege->conversation_id);
+        $groupmMemberBuilder->join('contacts','contacts.id','messeges.contact_id');
+        $groupmMemberBuilder->orderBy('messeges.id', 'asc');
+        $gmesseges=$groupmMemberBuilder->get()->toArray();
+        event(new GroupMessegeEvent($gmesseges));
+        }else{
+            $messege=Messege::get()->toArray();
+            event(new \App\Events\MessegeEvent($messege));
+        }
         return $messege;
     }
 
